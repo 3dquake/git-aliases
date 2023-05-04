@@ -1,0 +1,96 @@
+# This needs to be first to functions use the correct git as well
+if [ USE_GIT_FOR_WINDOWS ]; then
+    alias git="/mnt/c/Program\ Files/Git/bin/git.exe"
+fi
+
+git_commit()
+{
+    if [ -z "$1" ]; then
+        git commit --verbose
+    else
+        git commit --verbose --message "$1"
+    fi
+}
+
+git_add_all_commit_merge_push()
+{
+    git_add_all
+    git_commit "$1"
+    git fetch --verbose
+    git merge --verbose
+    git push
+}
+
+git_add()
+{
+    git add --verbose "$1"
+}
+
+git_add_all()
+{
+    # List modified, untracked files 
+    if [ -z "$(git ls-files --modified --others --exclude-standard)" ]; then
+        echo "No files in worktree"
+        return 1
+    fi
+
+    git add --all --verbose
+}
+
+# Darwin-like 'open' command
+open() {
+    pushd "$1"
+    start .
+    popd
+}
+
+git_discard() {
+    git restore --worktree $1
+}
+
+# Git for Windows alias
+if [ -f /mnt/c/Program\ Files/Git/bin/git.exe ]; then
+    alias wgit="/mnt/c/Program\ Files/Git/bin/git.exe"
+fi
+
+alias gss='git status'
+alias gs='git status --short'
+alias gc=git_commit
+alias ga=git_add
+alias gaa=git_add_all
+alias gp='git push'
+alias gsh='git reset --hard'
+alias gd=git_discard
+alias gdd='git reset --hard' # git discard all
+alias gu='git restore --staged'
+alias guu='git reset' # git unstage all
+alias gf="git diff"
+alias gfs='git diff --staged'
+alias gaacmp=git_add_all_commit_merge_push
+alias get='git fetch --verbose'
+alias gm='git merge --verbose'
+alias gl='git log --oneline --since last.week -25'
+alias gll='git log --oneline --since last.week'
+alias glla='git log --oneline'
+alias gra='git log --graph --oneline'
+alias gaac='git_add_all && git_commit $1'
+alias go='git checkout $1'
+alias gr='git rebase'
+
+# alias ll='ls -1 --color=auto --group-directories-first'
+# alias la='ls -lah --color=auto --group-directories-first'
+
+# ???
+# export MSBUILD="/C/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/MSBuild.exe"
+
+# Unity Hub
+alias hub="/mnt/c/Program\ Files/Unity\ Hub/Unity\ Hub.exe -- --headless"
+
+# Appium exports
+# export REPO_OS_OVERRIDE="windows"
+# export ANDROID_SDK_ROOT="/C/Android/Sdk"
+# export ANDROID_HOME="/C/Android/Sdk"
+# export JAVA_HOME="/C/Java/"
+
+# For 'CTRL+S' forward-i-search
+stty -ixon
