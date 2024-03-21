@@ -1,6 +1,8 @@
 # This needs to be first to functions use the correct git as well
 if [ USE_GIT_FOR_WINDOWS ]; then
-    alias git="/mnt/c/Program\ Files/Git/bin/git.exe"
+    GIT_DIRECTORY=$(find "/mnt/c/Program Files" -maxdepth 1 -iname git -print -quit)
+    GIT_EXECUTABLE=$(find "$GIT_DIRECTORY/bin" -iname git.exe -print -quit)
+    alias git="${GIT_EXECUTABLE}"
 fi
 
 git_commit()
@@ -69,10 +71,9 @@ alias gfs='git diff --staged'
 alias gaacmp=git_add_all_commit_merge_push
 alias get='git fetch --verbose'
 alias gm='git merge --verbose'
-alias gl='git log --oneline --since last.week -25'
-alias gll='git log --oneline --since last.week'
-alias glla='git log --oneline'
-alias gra='git log --graph --oneline'
+alias gl='git log --oneline --decorate --since last.week -25'
+alias gll='git log --oneline --decorate --since last.week'
+alias gra='git log --graph --oneline --decorate'
 alias gaac='git_add_all && git_commit $1'
 alias go='git checkout $1'
 alias gr='git rebase'
@@ -90,7 +91,7 @@ alias hub="/mnt/c/Program\ Files/Unity\ Hub/Unity\ Hub.exe -- --headless"
 # export REPO_OS_OVERRIDE="windows"
 # export ANDROID_SDK_ROOT="/C/Android/Sdk"
 # export ANDROID_HOME="/C/Android/Sdk"
-# export JAVA_HOME="/C/Java/"
+# export JAVA_HOME="/mnt/c/Java"
 
 # For 'CTRL+S' forward-i-search
 stty -ixon
